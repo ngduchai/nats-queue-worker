@@ -16,9 +16,9 @@ import (
 	"time"
 
 	stan "github.com/nats-io/go-nats-streaming"
-	"github.com/openfaas/faas-provider/auth"
-	"github.com/openfaas/faas/gateway/queue"
-	"github.com/openfaas/nats-queue-worker/nats"
+	"github.com/ngduchai/faas-provider/auth"
+	"github.com/ngduchai/faas/gateway/queue"
+	"github.com/ngduchai/nats-queue-worker/nats"
 )
 
 func main() {

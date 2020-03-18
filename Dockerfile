@@ -1,7 +1,7 @@
 FROM golang:1.11-alpine as golang
 ENV CGO_ENABLED=0
 
-WORKDIR /go/src/github.com/openfaas/nats-queue-worker
+WORKDIR /go/src/github.com/ngduchai/nats-queue-worker
 
 COPY vendor     vendor
 COPY handler    handler
@@ -33,6 +33,6 @@ USER app
 COPY --from=golang /etc/passwd /etc/group /etc/
 COPY --from=golang /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=golang --chown=app:app /scratch-tmp /tmp
-COPY --from=golang /go/src/github.com/openfaas/nats-queue-worker/app    .
+COPY --from=golang /go/src/github.com/ngduchai/nats-queue-worker/app    .
 
 CMD ["./app"]

@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	"github.com/openfaas/faas/gateway/queue"
+	"github.com/ngduchai/faas/gateway/queue"
 )
 
 func Test_makeFunctionURL_DefaultPathQS_GatewayInvoke_IncludesGWAddress(t *testing.T) {

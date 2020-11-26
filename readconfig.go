@@ -19,7 +19,7 @@ const DefaultReconnectDelay = time.Second * 2
 func (ReadConfig) Read() (QueueWorkerConfig, error) {
 	cfg := QueueWorkerConfig{
 		AckWait:     time.Second * 30,
-		MaxInflight: 1,
+		MaxInflight: 10000,
 	}
 
 	if val, exists := os.LookupEnv("faas_nats_address"); exists {

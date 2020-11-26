@@ -821,7 +821,7 @@ func (sc *conn) processMsg(raw *nats.Msg) {
 
 	// Perform the callback
 	if cb != nil && subsc != nil {
-		cb(msg)
+		go cb(msg)
 	}
 
 	// Process auto-ack

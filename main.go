@@ -28,6 +28,8 @@ func main() {
 		panic(configErr)
 	}
 
+	log.Printf("Start nats-queue-worker")
+
 	log.SetFlags(0)
 
 	hostname, _ := os.Hostname()
@@ -207,6 +209,8 @@ func main() {
 		ackWait:        config.AckWait,
 	}
 
+	log.Printf("InFlight = %d", config.MaxInflight)
+
 	if initErr := natsQueue.connect(); initErr != nil {
 		log.Panic(initErr)
 	}
@@ -244,13 +248,16 @@ func main() {
 func makeClient() http.Client {
 	proxyClient := http.Client{
 		Transport: &http.Transport{
-			Proxy: http.ProxyFromEnvironment,
+			MaxIdleConnsPerHost: 200,
+			Proxy:               http.ProxyFromEnvironment,
 			DialContext: (&net.Dialer{
 				Timeout:   30 * time.Second,
 				KeepAlive: 0,
 			}).DialContext,
-			MaxIdleConns:          1,
-			DisableKeepAlives:     true,
+			// MaxIdleConns:          1,
+			MaxIdleConns: 0,
+			// DisableKeepAlives:     true,
+			DisableKeepAlives:     false,
 			IdleConnTimeout:       120 * time.Millisecond,
 			ExpectContinueTimeout: 1500 * time.Millisecond,
 		},
@@ -261,7 +268,7 @@ func makeClient() http.Client {
 func postResult(client *http.Client, functionRes *http.Response, result []byte, callbackURL string, xCallID string, statusCode int, timeTaken float64) (int, error) {
 	var reader io.Reader
 
-	if functionRes.Header.Get("X-Duration-Seconds") == "" {
+	if functionRes != nil && functionRes.Header.Get("X-Duration-Seconds") == "" {
 		functionRes.Header.Set("X-Duration-Seconds", fmt.Sprintf("%f", timeTaken))
 	}
 
